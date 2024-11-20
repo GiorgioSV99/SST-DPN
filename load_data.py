@@ -192,42 +192,18 @@ def normalize_data_per_sample(data):
 
 
 if __name__ == "__main__":
-    # # * BCIC 2a
-    preprocessing_2a = {
-        "sfreq": 250,
-        "low_cut": None,
-        "high_cut": None,
-        "start": 0,
-        "stop": 0,
-        "z_scale": False,
-    }
-    for i in range(1, 10):
-        X, y, X_test, y_test = load_bcic("2a", i, preprocessing_2a)
-        print(X.shape, y.shape, X_test.shape, y_test.shape)
 
-    # * BCIC 2b
-    # preprocessing_2b = {
-    #     "sfreq": 250,
-    #     "low_cut": None,
-    #     "high_cut": None,
-    #     "start": 0,
-    #     "stop": 0,
-    #     "z_scale": False,
-    # }
-    # for i in range(1, 10):
-    #     X, y, X_test, y_test = load_bcic("2b", i, preprocessing_2b)
-    #     print(X.shape, y.shape, X_test.shape, y_test.shape)
+    BCIC 2b
+    preprocessing_2b = {
+         "sfreq": 250,
+         "low_cut": None,
+         "high_cut": None,
+         "start": 0,
+         "stop": 0,
+         "z_scale": False,
+     }
+     for i in range(1, 10):
+         X, y, X_test, y_test = load_bcic("2b", i, preprocessing_2b)
+    print(X.shape, y.shape, X_test.shape, y_test.shape)
 
-    # *BCI3
-    # raw_path = "../data//BCIC3"
-    # preprocessing_bci3 = {
-    #     "sfreq": 100,
-    #     "low_cut": None,
-    #     "high_cut": None,
-    #     "start": 0,
-    #     "stop": 3.5,
-    #     "z_scale": False,
-    # }
-    # for i in range(1, 6):
-    #     X, y, X_test, y_test = load_bci3(raw_path, i, preprocessing_bci3)
-    #     print(X.shape, y.shape, X_test.shape, y_test.shape)
+
