@@ -193,7 +193,7 @@ def normalize_data_per_sample(data):
 
 if __name__ == "__main__":
 
-    BCIC 2b
+    #BCIC 2b
     preprocessing_2b = {
          "sfreq": 250,
          "low_cut": None,
