@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torchinfo import summary
 
-from .modules import Conv2dWithConstraint
+from modules import Conv2dWithConstraint
 
 
 class EEGNetEncoder(nn.Module):
