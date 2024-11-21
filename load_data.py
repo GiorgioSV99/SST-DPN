@@ -63,7 +63,7 @@ def load_bcic(
         dataset,
         trial_start_offset_samples=trial_start_offset_samples,
         trial_stop_offset_samples=trial_stop_offset_samples,
-        preload=False,
+        preload=True,
     )
 
     # split the data
