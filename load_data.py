@@ -33,19 +33,20 @@ def load_bcic(
     dataset_name = "BNCI2014_001" if dataset_id == "2a" else "BNCI2014_004"
     dataset = MOABBDataset(dataset_name, subject_ids=[subject_id])
 
+    # Pre-processing steps
     preprocessors = [
         Preprocessor("pick_types", eeg=True, meg=False, eog=False, stim=False, verbose=True),
         Preprocessor(lambda data: multiply(data, 1e6)),
     ]
 
-    # filtering or not
+    # Filtering or not
     l_freq, h_freq = preprocessing_dict["low_cut"], preprocessing_dict["high_cut"]
     if l_freq is not None or h_freq is not None:
         preprocessors.append(
             Preprocessor("filter", l_freq=l_freq, h_freq=h_freq, verbose=verbose)
         )
 
-    # resample or not
+    # Resample or not
     if dataset.datasets[0].raw.info["sfreq"] != preprocessing_dict["sfreq"]:
         preprocessors.append(
             Preprocessor(
@@ -55,14 +56,49 @@ def load_bcic(
 
     preprocess(dataset, preprocessors)
 
-    # create windows
-    sfreq = dataset.datasets[0].raw.info["sfreq"]
-    trial_start_offset_samples = int(preprocessing_dict["start"] * sfreq)
-    trial_stop_offset_samples = int(preprocessing_dict["stop"] * sfreq)
+    # Ottenere informazioni sul segnale EEG
+    sfreq = dataset.datasets[0].raw.info["sfreq"]  # Frequenza di campionamento
+    n_samples = dataset.datasets[0].raw.n_times  # Numero totale di campioni
+
+    # Mostra il numero totale di campioni nel segnale
+    print(f"Numero totale di campioni nel segnale: {n_samples}")
+
+    # Definisci i parametri start e stop (in secondi)
+    start_time = preprocessing_dict["start"]  # In secondi
+    stop_time = preprocessing_dict["stop"]    # In secondi
+
+    # Calcolare gli offset in campioni
+    start_offset_samples = int(start_time * sfreq)
+    stop_offset_samples = int(stop_time * sfreq)
+
+    # Visualizza gli offset in campioni
+    print(f"Start offset (campioni): {start_offset_samples}")
+    print(f"Stop offset (campioni): {stop_offset_samples}")
+
+    # Calcolare i campioni effettivi che vengono presi in considerazione per ciascun trial
+    trial_start_sample = start_offset_samples
+    trial_end_sample = stop_offset_samples
+
+    # Mostra la finestra temporale selezionata
+    print(f"Campioni presi in considerazione per il motor imagery task: {trial_start_sample} - {trial_end_sample}")
+
+    # Considera solo i campioni utili per il motor imagery task (filtro sugli eventi)
+    motor_imagery_events = [event for event in dataset.datasets[0].events if event[2] == 1]  # Supponiamo che "1" rappresenti il motor imagery task
+
+    # Calcola la finestra temporale per ogni evento
+    for event in motor_imagery_events:
+        event_time = event[0] / sfreq  # Tempo dell'evento in secondi
+        start_sample = int((event_time + start_time) * sfreq)  # Inizia la finestra
+        stop_sample = int((event_time + stop_time) * sfreq)    # Fine della finestra
+        
+        # Mostra i campioni di inizio e fine per il motor imagery task
+        print(f"Evento motor imagery {event}: Campioni da {start_sample} a {stop_sample}")
+
+    # Create windows from events with the defined offsets
     windows_dataset = create_windows_from_events(
         dataset,
-        trial_start_offset_samples=trial_start_offset_samples,
-        trial_stop_offset_samples=trial_stop_offset_samples,
+        trial_start_offset_samples=start_offset_samples,
+        trial_stop_offset_samples=stop_offset_samples,
         preload=True,
     )
 
