@@ -34,7 +34,7 @@ def load_bcic(
     dataset = MOABBDataset(dataset_name, subject_ids=[subject_id])
 
     preprocessors = [
-        Preprocessor("pick_types", eeg=True, meg=False, stim=False, verbose=verbose),
+        Preprocessor("pick_types", eeg=True, meg=False, eog=False, stim=False, verbose=verbose),
         Preprocessor(lambda data: multiply(data, 1e6)),
     ]
 
