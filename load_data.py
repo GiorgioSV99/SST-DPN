@@ -1,9 +1,6 @@
 import os
 from typing import Dict
 import numpy as np
-!pip install resampy
-!pip install braindecode
-!pip install moabb
 import resampy
 import scipy
 from braindecode.datasets import MOABBDataset
